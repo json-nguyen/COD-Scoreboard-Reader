@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "united-monument-371102",
+  "private_key_id": "ca96322d50e8ddf117e010e52e3ed7e128ad97a1",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDnBHv/+VFuLLII\nZrUXEDw1Ki7qbTTf6bI+43PPtESZ3Q2HwIwKcbpiTWn0tUZAfNwAJsy7+KKHSfHY\nTTMJFk9jEVc9Tu+UCBEDjCOI2o+oqbt2zcGzg3cw36U2VcsJ7yvcfzwTOS8upVMT\nPNtQKjYzozvfOQ4apKAnYkaPB5DuBoWZsMumwLIS5fM6Uvyuraab347OSs+JWO0K\nMb1uxoZFPIkG4vb7JgqDfUfDOxLg/0kNEYccqQrj5axqGJ+q/ZIi4mA44oW2ySFq\nHaFATMTlO1tx8o2GteuRqQmy4Lfn3AV5frL1WC0W92rJiqA4MGFqBS+KSJs1UbME\no4uIPjBtAgMBAAECggEAG6X2Pzr0C3cO8aF1L+byBbzgM49RYjECc7NeI3AkO7Pw\nkBwzxnY5A9XXBgIB/+rRm7UJEMAfl4h6iNQodQB2DNnA8qX1V2alvqJxiEn8Iof5\n1yyl75me1LsXd0rKS4yT18Zkhrpz0qXXrPg+GTiMFx8EpeEatoaYYk5JOooBxvLH\nqPLTWuRPgbxDJ++mAB4tQWu7+JrCQ6WTA7vLdvFaGiuJuTA0X2vgM+55RHCeBF2x\nXEyy35R8XB9Z9gSuMHXGJUIKuqafE5sQVjWsjoiT0M1TC0FTFvZdA6L8X0wwtqHG\nVngHxf4ZFXSSZ/J69Fy+gjX06NhObi5TH7782uGqYwKBgQD1h45QtGzA30XCaJi3\nTiFYUbbRkgQ7Z/8JKc11ebiO+JHxpJ0DH8H46uZTQuLCrUXuU7n3zdeigDGOFgWp\nOUAtsrOR3iHgXKtdvQx02Sn5cXaboZueYuOUNPFeLw87TrPkI3UxPm6/2uvskvNA\nFpuCoklcKucRqJHHk1xRVUFxYwKBgQDw3oBF+8mj0HYTA4pTvuZw7qhPbbL93aGs\nWTFoU631W1UyOtT9H0mDZX0EboczK7AoxWI6GJPSJqV6NcO+Biofv90UaB90C05Z\nP9NhTZeH/g2i1Agy54YIgfEQgWapG02ZpmGOtDDSJqlesz3NaPSWOe/Y9dIyRl9u\nLHTR7Gfn7wKBgHNf+5QY9HG9eT5dgEXCxRCHdW0NPEfeGo3nwtBNHliwnYP7Ynyx\nU6jwWMMPTxdD7PSNC3pSk92cd6zY1Fgsuue+bXtB8pFHeo9V4qCV24+HrcB8NHA8\n78wZBMLJQlMQLKAruUommEw3R12nv/6BoRnFwMs6rdIycC5kJKFjepkZAoGBAJ0s\nw81nAOwZYoMDw2bkYiD9Su0Rq0QHNLFvPlNSj2hUoeJ2C3fky6anOg4DRcv5TSk9\nq9w3H3Z5a2+017cO9LvlChF/5E5n9kc84+VRqXi/Kgy/iV4WQBsbF7/qgKAGxftm\nW7CwGk93lPvLwJ9iRoAk7ELKHdBapXkSH2TAfAkXAoGAeB3g+/osYoPbRbZZ8yh7\nvocsIwsEfNdWTXY9QYMInXtbep0VDbXCiC1w4pf7iVo+Q00G4lt2XovtuGfFwBGJ\nXGR3edFcipOr74AGuaLdrA1y195Oabs0C2CuiVtjIBgjDcdTHs9NLYGqt5bz85Z2\niNbma0KVjSP+SWxk1YH5m7Y=\n-----END PRIVATE KEY-----\n",
+  "client_email": "jason-nguyen@united-monument-371102.iam.gserviceaccount.com",
+  "client_id": "111791060064065739704",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/jason-nguyen%40united-monument-371102.iam.gserviceaccount.com"
+}
