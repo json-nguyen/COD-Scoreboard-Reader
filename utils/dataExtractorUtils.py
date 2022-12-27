@@ -24,7 +24,6 @@ def getScoreBoard(texts):
             if(text.description == str(x)):
                 dict[x].append(text)
     
-    # 
     for idx1, key in enumerate(dict):
         for idx2, value in enumerate(dict[key]):
             if idx2 == 0:
@@ -40,6 +39,20 @@ def getScoreBoard(texts):
         return
     
     # TODO: loop through, grab everything on the same y and order by x
+    # for test in texts:
+    #     if test.bounds.bottomLeft['y'] in range(playerNumbers[0].bounds.bottomLeft['y'] -3, playerNumbers[0].bounds.bottomLeft['y'] +3):
+    #         scoreboard.append(test.description)
+    # print(scoreboard)
+    scoreboard = []
 
     for key in playerNumbers:
-      print(playerNumbers[key].printTextWhenJson())
+        unsortedScoreboard = []
+        for test in texts:
+            if test.bounds.bottomLeft['y'] in range(playerNumbers[key].bounds.bottomLeft['y'] - 5, playerNumbers[key].bounds.bottomLeft['y'] + 5):
+                unsortedScoreboard.append({
+                    "description": test.description,
+                    "position": test.bounds.bottomLeft['x']
+                })
+        sortedRow = sorted(unsortedScoreboard, key=lambda x: x['position'])
+        scoreboard.append(list(map(lambda x:x['description'], sortedRow)))
+    return scoreboard
