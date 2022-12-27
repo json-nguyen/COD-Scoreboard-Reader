@@ -1,4 +1,4 @@
-import os
+import sys
 import models.ImageText as ImageText
 import models.Bounds as Bounds
 import utils.debuggingUtils as debuggingUtils
@@ -35,7 +35,7 @@ def transformText(texts):
         for vertex in text.bounding_poly.vertices:
             bounds.append(vertex)
 
-        vertices = ImageText.Bounds(bounds[0], bounds[1], bounds[2], bounds[3])
+        vertices = Bounds.Bounds(bounds[0], bounds[1], bounds[2], bounds[3])
         it = ImageText.ImageText(text.description, vertices, idx)
 
         retVal.append(it)
@@ -43,12 +43,15 @@ def transformText(texts):
 
 
 if __name__ == "__main__":
-    #texts = detectText(r".\image.png")
-    
+
+    """ Detect Image through API """
+    texts = detectText(r"images\image.png")
     # utils.dumpJson(texts)
 
-    f = open('testData.json')
-    jsonData = json.load(f)
-    texts = debuggingUtils.convertJsonToImageTextList(jsonData)
-    dataExtractorUtils.getScoreBoard(texts)
+    """ Read in existing json file so we dont need to call API while testing """
+    #f = open('testData.json')
+    #jsonData = json.load(f)
+    #texts = debuggingUtils.convertJsonToImageTextList(jsonData) 
+    scoreboard = dataExtractorUtils.getScoreBoard(texts)
+    print (scoreboard)
    
