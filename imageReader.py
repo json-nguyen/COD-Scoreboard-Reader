@@ -1,6 +1,8 @@
 import os
-import imageText
-import utils
+import models.ImageText as ImageText
+import models.Bounds as Bounds
+import utils.debuggingUtils as debuggingUtils
+import utils.dataExtractorUtils as dataExtractorUtils
 import json
 
 def detectText(path):
@@ -33,40 +35,12 @@ def transformText(texts):
         for vertex in text.bounding_poly.vertices:
             bounds.append(vertex)
 
-        vertices = imageText.Bounds(bounds[0], bounds[1], bounds[2], bounds[3])
-        it = imageText.ImageText(text.description, vertices, idx)
+        vertices = ImageText.Bounds(bounds[0], bounds[1], bounds[2], bounds[3])
+        it = ImageText.ImageText(text.description, vertices, idx)
 
         retVal.append(it)
     return retVal[1:]
 
-# Takes in list of ImageText and extracts all scoreboard data and inputs into 2d array
-def getScoreBoard(texts):
-    # Grab all values with descriptions 1-8
-    dict = {
-        1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: []
-    }
-    playerNumbers = {}
-
-    for x in range(1, 9):
-        for text in texts:
-            if(text.description == str(x)):
-                dict[x].append(text)
-    
-    for idx1, key in enumerate(dict):
-        for idx2, value in enumerate(dict[key]):
-            if idx2 == 0:
-                playerNumbers[idx1] = value
-                continue
-            # change this later to .x when using real data
-            if playerNumbers[idx1].bounds.topLeft['x'] > value.bounds.topLeft['x']:
-                playerNumbers[idx1] = value
-    
-    # Need to validate that these are the right numbers
-    # TODO: handle case where validation fails
-    # utils.hasOutliers(playerNumbers, 5)
-    # TODO: loop through, grab everything on the same y and order by x
-
-    
 
 if __name__ == "__main__":
     #texts = detectText(r".\image.png")
@@ -75,6 +49,6 @@ if __name__ == "__main__":
 
     f = open('testData.json')
     jsonData = json.load(f)
-    texts = utils.convertJsonToImageTextList(jsonData)
-    getScoreBoard(texts)
+    texts = debuggingUtils.convertJsonToImageTextList(jsonData)
+    dataExtractorUtils.getScoreBoard(texts)
    

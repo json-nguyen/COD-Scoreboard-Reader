@@ -1,9 +1,11 @@
+import models.Bounds as Bounds
+
 class ImageText:
 
   def __init__(self, description, bounds, id):
     self.id = id
     self.description = description
-    self.bounds = Bounds(bounds.topLeft, bounds.topRight, bounds.bottomRight, bounds.bottomLeft)
+    self.bounds = Bounds.Bounds(bounds.topLeft, bounds.topRight, bounds.bottomRight, bounds.bottomLeft)
   
   def printTextData(self):
       print('\n"{}"'.format(self.description))
@@ -20,9 +22,49 @@ class ImageText:
       print('Bottom Right: ({},{})'.format(self.bounds.bottomRight['x'], self.bounds.bottomRight['y']))
       print('Bottom Left: ({},{})'.format(self.bounds.bottomLeft['x'], self.bounds.bottomLeft['y']))
 
-class Bounds:
-  def __init__(self, topLeft, topRight, bottomRight, bottomLeft):
-    self.topLeft = topLeft
-    self.topRight = topRight
-    self.bottomRight = bottomRight
-    self.bottomLeft = bottomLeft
+
+
+#  {
+#     "id": 6,
+#     "description": "1",
+#     "bounds": {
+#       "topLeft": {
+#         "x": 190,
+#         "y": 222
+#       },
+#       "topRight": {
+#         "x": 196,
+#         "y": 222
+#       },
+#       "bottomRight": {
+#         "x": 196,
+#         "y": 234
+#       },
+#       "bottomLeft": {
+#         "x": 190,
+#         "y": 234
+#       }
+#     }
+#   },
+#   {
+#     "id": 7,
+#     "description": "CoutiSZN",
+#     "bounds": {
+#       "topLeft": {
+#         "x": 214,
+#         "y": 222
+#       },
+#       "topRight": {
+#         "x": 281,
+#         "y": 222
+#       },
+#       "bottomRight": {
+#         "x": 281,
+#         "y": 234
+#       },
+#       "bottomLeft": {
+#         "x": 214,
+#         "y": 234
+#       }
+#     }
+#   },
