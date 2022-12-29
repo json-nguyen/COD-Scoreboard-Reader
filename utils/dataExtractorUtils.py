@@ -1,13 +1,13 @@
 # File with helper function that help extract data from Image Reader 
 
 def hasOutliers(data, deviation):
-    sortedListIndexs = sorted(data, key=lambda x: data[x].bounds.topLeft.x)
+    sortedListIndexs = sorted(data, key=lambda x: data[x].bounds.topLeft['x'])
     sortedList = []
     for x in sortedListIndexs:
         sortedList.append(data[x])
-    median = (sortedList[3].bounds.topLeft.x + sortedList[4].bounds.topLeft.x)/2
+    median = (sortedList[3].bounds.topLeft['x'] + sortedList[4].bounds.topLeft['x'])/2
     for x in sortedList:
-        if x.bounds.topLeft.x > median + deviation or  x.bounds.topLeft.x < median - deviation:
+        if x.bounds.topLeft['x'] > median + deviation or  x.bounds.topLeft['x'] < median - deviation:
             return True
     return False
 
@@ -30,7 +30,7 @@ def getScoreBoard(texts):
                 playerNumbers[idx1] = value
                 continue
             # change this later to .x when using real data
-            if playerNumbers[idx1].bounds.topLeft.x > value.bounds.topLeft.x:
+            if playerNumbers[idx1].bounds.topLeft['x'] > value.bounds.topLeft['x']:
                 playerNumbers[idx1] = value
 
     if hasOutliers(playerNumbers, 5):
@@ -43,11 +43,46 @@ def getScoreBoard(texts):
     for key in playerNumbers:
         unsortedScoreboard = []
         for test in texts:
-            if test.bounds.bottomLeft.y in range(playerNumbers[key].bounds.bottomLeft.y - 5, playerNumbers[key].bounds.bottomLeft.y + 5):
+            if test.bounds.bottomLeft['y'] in range(playerNumbers[key].bounds.bottomLeft['y'] - 5, playerNumbers[key].bounds.bottomLeft['y'] + 5):
                 unsortedScoreboard.append({
                     "description": test.description,
-                    "position": test.bounds.bottomLeft.x
+                    "position": test.bounds.bottomLeft['x']
                 })
         sortedRow = sorted(unsortedScoreboard, key=lambda x: x['position'])
         scoreboard.append(list(map(lambda x:x['description'], sortedRow)))
     return scoreboard
+
+
+def getTopLeftCorner(texts): 
+    gameMode = getGameMode(texts)
+    gameMap = getGameMap(texts, gameMode)
+    print(gameMode.description)
+
+def getGameMode(texts):
+    top_left_word = None
+    top_left_x = float('inf')
+    top_left_y = float('inf')
+    for text in texts:
+        vertices = text.bounds.topLeft
+        x1 = vertices['x']
+        y1 = vertices['y']
+        if y1 < top_left_y or (x1 == top_left_x and y1 < top_left_y):
+            top_left_x = x1
+            top_left_y = y1
+            top_left_word = text
+
+    return top_left_word
+
+def getGameMap(texts, target):
+    below_word = None
+    below_bounding_box = None
+    for text in texts:
+        curBounds = text.bounds
+        if (curBounds.topLeft['x'] >= target.bounds.topLeft['x'] and
+            curBounds.bottomRight['x'] <= target.bounds.bottomRight['x'] and
+            curBounds.topLeft['y'] > target.bounds.bottomRight['y']):
+            below_word = text.description
+            below_bounding_box = curBounds
+            break
+    # Print the word below the target word
+    print(below_word)
