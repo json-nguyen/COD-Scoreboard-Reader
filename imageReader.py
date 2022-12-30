@@ -45,16 +45,17 @@ def transformText(texts):
 if __name__ == "__main__":
 
     """ Detect Image through API """
-    # texts = detectText(r"images\image2.png")
+    texts = detectText(r"images\image2.png")
+    print(texts)
     # debuggingUtils.dumpJson(texts)
 
     """ Read in existing json file so we dont need to call API while testing """
-    f = open('testData/testData2.json')
-    jsonData = json.load(f)
-    texts = debuggingUtils.convertJsonToImageTextList(jsonData) 
-    gameMode = dataExtractorUtils.getTopLeftCorner(texts)
-    scoreboard = dataExtractorUtils.getScoreBoard(texts)
-    print(scoreboard)
+    # f = open('testData/testData2.json')
+    # jsonData = json.load(f)
+    # texts = debuggingUtils.convertJsonToImageTextList(jsonData) 
+    # gameMode = dataExtractorUtils.getTopLeftCorner(texts)
+    # scoreboard = dataExtractorUtils.getScoreBoard(texts)
+    # print(scoreboard)
 
 
 [
