@@ -57,6 +57,7 @@ def getTopLeftCorner(texts):
     gameMode = getGameMode(texts)
     gameMap = getGameMap(texts, gameMode)
     print(gameMode.description)
+    print(gameMap)
 
 def getGameMode(texts):
     top_left_word = None
@@ -75,14 +76,29 @@ def getGameMode(texts):
 
 def getGameMap(texts, target):
     below_word = None
-    below_bounding_box = None
+    below_bounds = None
     for text in texts:
         curBounds = text.bounds
         if (curBounds.topLeft['x'] >= target.bounds.topLeft['x'] and
             curBounds.bottomRight['x'] <= target.bounds.bottomRight['x'] and
             curBounds.topLeft['y'] > target.bounds.bottomRight['y']):
             below_word = text.description
-            below_bounding_box = curBounds
+            below_bounds = curBounds
             break
+
     # Print the word below the target word
-    print(below_word)
+    
+    gameMapWords = []
+    for text in texts:
+        if (text.bounds.topLeft['y'] in range(below_bounds.topLeft['y'] - 7, below_bounds.topLeft['y'] + 7) 
+            and not text.description.isdigit()):
+            gameMapWords.append({
+                "description": text.description,
+                "position": text.bounds.topLeft['x']
+            })
+    
+    print(gameMapWords)
+    sortedWords = sorted(gameMapWords, key=lambda x: x['position'])
+    wordList = list(map(lambda x:x['description'], sortedWords))
+
+    return " ".join(wordList)
