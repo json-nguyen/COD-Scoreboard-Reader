@@ -1,4 +1,5 @@
 # File with helper function that help extract data from Image Reader 
+import heapq
 
 def hasOutliers(data, deviation):
     sortedListIndexs = sorted(data, key=lambda x: data[x].bounds.topLeft['x'])
@@ -56,8 +57,7 @@ def getScoreBoard(texts):
 def getTopLeftCorner(texts): 
     gameMode = getGameMode(texts)
     gameMap = getGameMap(texts, gameMode)
-    print(gameMode.description)
-    print(gameMap)
+    return (gameMode.description, gameMap)
 
 def getGameMode(texts):
     top_left_word = None
@@ -75,18 +75,14 @@ def getGameMode(texts):
     return top_left_word
 
 def getGameMap(texts, target):
-    below_word = None
     below_bounds = None
     for text in texts:
         curBounds = text.bounds
         if (curBounds.topLeft['x'] >= target.bounds.topLeft['x'] and
             curBounds.bottomRight['x'] <= target.bounds.bottomRight['x'] and
             curBounds.topLeft['y'] > target.bounds.bottomRight['y']):
-            below_word = text.description
             below_bounds = curBounds
             break
-
-    # Print the word below the target word
     
     gameMapWords = []
     for text in texts:
@@ -97,8 +93,11 @@ def getGameMap(texts, target):
                 "position": text.bounds.topLeft['x']
             })
     
-    print(gameMapWords)
     sortedWords = sorted(gameMapWords, key=lambda x: x['position'])
     wordList = list(map(lambda x:x['description'], sortedWords))
 
     return " ".join(wordList)
+
+def getTeamNames(scoreboard, texts): 
+    # Get team names, they are the left furthest texts
+    teamNames = heapq.nsmallest(2, texts, key=lambda x: x.bounds.topLeft['x'])

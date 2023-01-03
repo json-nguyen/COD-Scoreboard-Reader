@@ -56,7 +56,7 @@ if __name__ == "__main__":
     f = open('testData/testData.json')
     jsonData = json.load(f)
     texts = debuggingUtils.convertJsonToImageTextList(jsonData) 
-    gameMode = dataExtractorUtils.getTopLeftCorner(texts)
+    gameMode, gameMap = dataExtractorUtils.getTopLeftCorner(texts)
     scoreboard = dataExtractorUtils.getScoreBoard(texts)
-
+    teamNames = dataExtractorUtils.getTeamNames(scoreboard, texts)
 
