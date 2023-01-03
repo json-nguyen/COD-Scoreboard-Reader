@@ -59,4 +59,4 @@ if __name__ == "__main__":
     gameMode, gameMap = dataExtractorUtils.getTopLeftCorner(texts)
     scoreboard = dataExtractorUtils.getScoreBoard(texts)
     teamNames = dataExtractorUtils.getTeamNames(scoreboard, texts)
-
+    print(gameMode, gameMap, teamNames)

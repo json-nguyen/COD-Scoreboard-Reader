@@ -101,3 +101,26 @@ def getGameMap(texts, target):
 def getTeamNames(scoreboard, texts): 
     # Get team names, they are the left furthest texts
     teamNames = heapq.nsmallest(2, texts, key=lambda x: x.bounds.topLeft['x'])
+   
+    # print(teamNames[0].description, teamNames[1].description)
+
+    def findWordsToRight(initial, texts):
+        done = False
+        boundsX = initial.bounds.topRight['x']
+        boundsY = initial.bounds.topRight['y']
+        teamName = initial.description
+        while not done:
+            done = True
+            for text in texts:
+                if (text.bounds.topLeft['x'] in range(boundsX, boundsX + 15) and 
+                    text.bounds.topLeft['y'] in range(boundsY - 3, boundsY + 3) and
+                    text.description not in teamName):
+                    boundsX = text.bounds.topRight['x']
+                    teamName = teamName + " " + text.description
+                    done = False
+        return teamName
+
+    team1 = findWordsToRight(teamNames[0], texts)
+    team2 = findWordsToRight(teamNames[1], texts)
+
+    return [team1, team2]
