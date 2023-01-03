@@ -6,6 +6,7 @@ import utils.dataExtractorUtils as dataExtractorUtils
 import json
 import os 
 from google.cloud import vision
+from pprint import pprint
 
 # GOOGLE_CREDENTIALS = os.environ.get("united-monument-371102-ca96322d50e8.json")
 def detectText(path):
@@ -59,4 +60,15 @@ if __name__ == "__main__":
     gameMode, gameMap = dataExtractorUtils.getTopLeftCorner(texts)
     scoreboard = dataExtractorUtils.getScoreBoard(texts)
     teamNames = dataExtractorUtils.getTeamNames(scoreboard, texts)
-    print(gameMode, gameMap, teamNames)
+    gameScore = dataExtractorUtils.getGameScore(texts, gameMode)
+
+    print("GAMEMODE: ", gameMode)
+    print("MAP: ", gameMap)
+    print("SCORE: ", gameScore[0], gameScore[1])
+
+    print("\n", teamNames[0])
+    pprint(scoreboard[:len(scoreboard)//2], compact=True)
+    print("\n", teamNames[1])
+    pprint(scoreboard[len(scoreboard)//2:], compact=True)
+
+

@@ -63,11 +63,12 @@ def getGameMode(texts):
     top_left_word = None
     top_left_x = float('inf')
     top_left_y = float('inf')
+    # game mode is always top left, so we grab the top left most word
     for text in texts:
         vertices = text.bounds.topLeft
         x1 = vertices['x']
         y1 = vertices['y']
-        if y1 < top_left_y or (x1 == top_left_x and y1 < top_left_y):
+        if y1 < top_left_y or (x1 <= top_left_x and y1 < top_left_y):
             top_left_x = x1
             top_left_y = y1
             top_left_word = text
@@ -124,3 +125,32 @@ def getTeamNames(scoreboard, texts):
     team2 = findWordsToRight(teamNames[1], texts)
 
     return [team1, team2]
+
+def getGameScore(texts, gameMode): 
+    rightScore = None
+    top_right_x = float('inf')
+    top_right_y = float('inf')
+    # score is top left most exluding game mode
+    for text in texts:
+        vertices = text.bounds.topRight
+        x1 = vertices['x']
+        y1 = vertices['y']
+        if (y1 < top_right_y or (x1 >= top_right_x and y1 < top_right_y)) and text.description is not gameMode:
+            top_right_x = x1
+            top_right_y = y1
+            rightScore = text
+    
+    # now get the other score which is left of the score we just found
+    leftScore = None
+    boundsY = rightScore.bounds.topLeft['y']
+    for text in texts:
+        if leftScore is None:
+            leftScore = text
+            continue
+
+        if (text.bounds.topLeft['y'] in range(boundsY - 3, boundsY + 3) and 
+            text.bounds.topRight['x'] > leftScore.bounds.topRight['x'] and
+            text.description is not rightScore.description):
+            leftScore = text
+
+    return [leftScore.description, rightScore.description]
