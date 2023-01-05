@@ -3,6 +3,7 @@ import models.ImageText as ImageText
 import models.Bounds as Bounds
 import utils.debuggingUtils as debuggingUtils
 import utils.dataExtractorUtils as dataExtractorUtils
+import utils.excelUtils as excelUtils
 import json
 import os 
 from google.cloud import vision
@@ -59,16 +60,17 @@ if __name__ == "__main__":
     texts = debuggingUtils.convertJsonToImageTextList(jsonData) 
     gameMode, gameMap = dataExtractorUtils.getTopLeftCorner(texts)
     scoreboard = dataExtractorUtils.getScoreBoard(texts)
-    teamNames = dataExtractorUtils.getTeamNames(scoreboard, texts)
+    teamNames = dataExtractorUtils.getTeamNames(texts)
     gameScore = dataExtractorUtils.getGameScore(texts, gameMode)
 
-    print("GAMEMODE: ", gameMode)
-    print("MAP: ", gameMap)
-    print("SCORE: ", gameScore[0], gameScore[1])
+    exportExcel = excelUtils.exportToExcel(gameMode, gameMap, gameScore, scoreboard, teamNames)
+    # print("GAMEMODE: ", gameMode)
+    # print("MAP: ", gameMap)
+    # print("SCORE: ", gameScore[0], gameScore[1])
 
-    print("\n", teamNames[0])
-    pprint(scoreboard[:len(scoreboard)//2], compact=True)
-    print("\n", teamNames[1])
-    pprint(scoreboard[len(scoreboard)//2:], compact=True)
+    # print("\n", teamNames[0])
+    # pprint(scoreboard[:len(scoreboard)//2], compact=True)
+    # print("\n", teamNames[1])
+    # pprint(scoreboard[len(scoreboard)//2:], compact=True)
 
 

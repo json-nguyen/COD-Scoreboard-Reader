@@ -99,12 +99,14 @@ def getGameMap(texts, target):
 
     return " ".join(wordList)
 
-def getTeamNames(scoreboard, texts): 
+def getTeamNames(texts): 
     # Get team names, they are the left furthest texts
     teamNames = heapq.nsmallest(2, texts, key=lambda x: x.bounds.topLeft['x'])
-   
-    # print(teamNames[0].description, teamNames[1].description)
 
+    # Make sure they are ordered from top to bottom
+    teamNames.sort(key=lambda y: y.bounds.topLeft['y'])
+
+    # Team Names consist of more than one word so fetch them
     def findWordsToRight(initial, texts):
         done = False
         boundsX = initial.bounds.topRight['x']
