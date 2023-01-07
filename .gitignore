@@ -1,4 +1,4 @@
 __pycache__/
 
 # Ignore all excel files
-*./xlsx
+*.xlsx
