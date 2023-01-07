@@ -50,18 +50,18 @@ def transformText(texts):
 if __name__ == "__main__":
 
     """ Detect Image through API """
-    # texts = detectText(r"./images/image.png")
-    # print(texts)
+    # texts = detectText(r"./images/image2.png")
     # debuggingUtils.dumpJson(texts)
 
     """ Read in existing json file so we dont need to call API while testing """
-    f = open('testData/testData.json')
+    f = open('testData/testData2.json')
     jsonData = json.load(f)
-    texts = debuggingUtils.convertJsonToImageTextList(jsonData) 
+    initialTexts = debuggingUtils.convertJsonToImageTextList(jsonData) 
+    texts = dataExtractorUtils.removeBestOfFiveText(initialTexts)
     gameMode, gameMap, totalGameTime = dataExtractorUtils.getTopLeftCorner(texts)
     scoreboard = dataExtractorUtils.getScoreBoard(texts)
     teamNames = dataExtractorUtils.getTeamNames(texts)
-    gameScore = dataExtractorUtils.getGameScore(texts, gameMode)
+    gameScore = dataExtractorUtils.getGameScore(texts, gameMode, teamNames)
 
     exportExcel = excelUtils.exportToExcel(gameMode, gameMap, gameScore, totalGameTime, scoreboard, teamNames)
     print("GAMEMODE: ", gameMode)

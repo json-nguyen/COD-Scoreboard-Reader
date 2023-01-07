@@ -1,6 +1,25 @@
 # File with helper function that help extract data from Image Reader 
 import heapq
 
+def removeBestOfFiveText(texts): 
+    print("initial length", len(texts))
+    best = None
+    idsToRemove = []
+    for text in texts:
+        if text.description.upper() == "BEST":
+            best = text
+    if best is None:
+        return texts
+
+    idsToRemove.append(best.id)
+
+    for text in texts:
+        if (text.bounds.topLeft['y'] in range(best.bounds.topLeft['y'] - 3, best.bounds.topLeft['y'] + 3)
+            and best.id != text.id):
+            idsToRemove.append(text.id)
+    
+    return list(filter(lambda x: x.id not in idsToRemove, texts))
+
 def hasOutliers(data, deviation):
     sortedListIndexs = sorted(data, key=lambda x: data[x].bounds.topLeft['x'])
     sortedList = []
@@ -56,7 +75,9 @@ def getScoreBoard(texts):
 
 def getTopLeftCorner(texts): 
     gameMode = getGameMode(texts)
+    print("GAMEMODE: ", gameMode.description)
     gameMap, gameMapText = getWordsBelow(texts, gameMode)
+
     totalGameTime, _ = getWordsBelow(texts, gameMapText)
     return (gameMode.description, gameMap, totalGameTime.split()[-1])
 
@@ -86,6 +107,7 @@ def getWordsBelow(texts, target):
             curBounds.topLeft['y'] < target.bounds.bottomLeft['y'] + 20 and
             target.description is not text.description 
             ):
+            print('here')
             belowText = text
     
     gameMapWords = []
@@ -131,16 +153,18 @@ def getTeamNames(texts):
 
     return [team1, team2]
 
-def getGameScore(texts, gameMode): 
+def getGameScore(texts, gameMode, teamNames): 
     rightScore = None
     top_right_x = float('inf')
     top_right_y = float('inf')
-    # score is top left most exluding game mode
+    # score is top right most exluding game mode
     for text in texts:
         vertices = text.bounds.topRight
         x1 = vertices['x']
         y1 = vertices['y']
-        if (y1 < top_right_y or (x1 >= top_right_x and y1 < top_right_y)) and text.description is not gameMode:
+        if ((y1 < top_right_y or (x1 >= top_right_x and y1 < top_right_y)) and 
+            text.description is not gameMode and
+            text.description in teamNames != -1):
             top_right_x = x1
             top_right_y = y1
             rightScore = text
