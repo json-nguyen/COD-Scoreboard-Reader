@@ -1,10 +1,11 @@
 import pandas as pd
 
-def exportToExcel(gameMode, gameMap, gameScore, scoreboard, teamNames):
+def exportToExcel(gameMode, gameMap, gameScore, gameDuration, scoreboard, teamNames):
   # Create a DataFrame
   dataframe = {
       'map': [],
       'gamemode': [],
+      'game_duration': [],
       'winning_team': [],
       'losing_team': [],
       'winning_team_score': [],
@@ -29,6 +30,7 @@ def exportToExcel(gameMode, gameMap, gameScore, scoreboard, teamNames):
   for row in winningScoreboard:
     dataframe['map'].append(gameMap.lower())
     dataframe['gamemode'].append(gameMode.lower())
+    dataframe['game_duration'].append(gameDuration)
     dataframe['winning_team'].append(winningTeam)
     dataframe['losing_team'].append(losingTeam)
     dataframe['winning_team_score'].append(winningScore)
@@ -41,10 +43,11 @@ def exportToExcel(gameMode, gameMap, gameScore, scoreboard, teamNames):
     dataframe['player_non_traded_kills'].append(row[4])
     dataframe['player_dmg'].append(row[6])
     dataframe['player_hill_time'].append(row[7] if gameMode == 'HARDPOINT' else 'N/A')
- 
+  
   for row in losingScoreboard:
     dataframe['map'].append(gameMap.lower())
     dataframe['gamemode'].append(gameMode.lower())
+    dataframe['game_duration'].append(gameDuration)
     dataframe['winning_team'].append(winningTeam)
     dataframe['losing_team'].append(losingTeam)
     dataframe['winning_team_score'].append(winningScore)

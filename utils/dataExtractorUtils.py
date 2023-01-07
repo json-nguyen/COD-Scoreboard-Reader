@@ -30,7 +30,7 @@ def getScoreBoard(texts):
             if idx2 == 0:
                 playerNumbers[idx1] = value
                 continue
-            # change this later to .x when using real data
+            # change this later to ['x'] when using real data
             if playerNumbers[idx1].bounds.topLeft['x'] > value.bounds.topLeft['x']:
                 playerNumbers[idx1] = value
 
@@ -56,8 +56,9 @@ def getScoreBoard(texts):
 
 def getTopLeftCorner(texts): 
     gameMode = getGameMode(texts)
-    gameMap = getGameMap(texts, gameMode)
-    return (gameMode.description, gameMap)
+    gameMap, gameMapText = getWordsBelow(texts, gameMode)
+    totalGameTime, _ = getWordsBelow(texts, gameMapText)
+    return (gameMode.description, gameMap, totalGameTime.split()[-1])
 
 def getGameMode(texts):
     top_left_word = None
@@ -75,19 +76,21 @@ def getGameMode(texts):
 
     return top_left_word
 
-def getGameMap(texts, target):
-    below_bounds = None
+def getWordsBelow(texts, target):
+    belowText = None
     for text in texts:
         curBounds = text.bounds
-        if (curBounds.topLeft['x'] >= target.bounds.topLeft['x'] and
-            curBounds.bottomRight['x'] <= target.bounds.bottomRight['x'] and
-            curBounds.topLeft['y'] > target.bounds.bottomRight['y']):
-            below_bounds = curBounds
-            break
+        # under 
+        # if top left ['x'] in range 5
+        if (curBounds.topLeft['x'] in range(target.bounds.topLeft['x'] - 3, target.bounds.topLeft['x'] + 3) and
+            curBounds.topLeft['y'] < target.bounds.bottomLeft['y'] + 20 and
+            target.description is not text.description 
+            ):
+            belowText = text
     
     gameMapWords = []
     for text in texts:
-        if (text.bounds.topLeft['y'] in range(below_bounds.topLeft['y'] - 7, below_bounds.topLeft['y'] + 7) 
+        if (text.bounds.topLeft['y'] in range(belowText.bounds.topLeft['y'] - 7, belowText.bounds.topLeft['y'] + 7) 
             and not text.description.isdigit()):
             gameMapWords.append({
                 "description": text.description,
@@ -97,7 +100,7 @@ def getGameMap(texts, target):
     sortedWords = sorted(gameMapWords, key=lambda x: x['position'])
     wordList = list(map(lambda x:x['description'], sortedWords))
 
-    return " ".join(wordList)
+    return " ".join(wordList), belowText
 
 def getTeamNames(texts): 
     # Get team names, they are the left furthest texts
