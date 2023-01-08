@@ -50,28 +50,32 @@ def transformText(texts):
 if __name__ == "__main__":
 
     """ Detect Image through API """
-    # texts = detectText(r"./images/image2.png")
     # debuggingUtils.dumpJson(texts)
 
     """ Read in existing json file so we dont need to call API while testing """
-    f = open('testData/testData.json')
-    jsonData = json.load(f)
-    initialTexts = debuggingUtils.convertJsonToImageTextList(jsonData) 
-    texts = dataExtractorUtils.removeBestOfFiveText(initialTexts)
-    gameMode, gameMap, totalGameTime = dataExtractorUtils.getTopLeftCorner(texts)
-    scoreboard = dataExtractorUtils.getScoreBoard(texts)
-    teamNames = dataExtractorUtils.getTeamNames(texts)
-    gameScore = dataExtractorUtils.getGameScore(texts, gameMode, teamNames)
+    # f = open('testData/testData.json')
+    # jsonData = json.load(f)
+    #initialTexts = debuggingUtils.convertJsonToImageTextList(jsonData) 
+    
+    images = os.listdir('./images')
+    for image in images:
+        initialTexts = detectText("./images/" + image)
+        # print(images)
+        texts = dataExtractorUtils.removeBestOfFiveText(initialTexts)
+        gameMode, gameMap, totalGameTime = dataExtractorUtils.getTopLeftCorner(texts)
+        scoreboard = dataExtractorUtils.getScoreBoard(texts)
+        teamNames = dataExtractorUtils.getTeamNames(texts)
+        gameScore = dataExtractorUtils.getGameScore(texts, gameMode, teamNames)
 
-    exportExcel = excelUtils.exportToExcel(gameMode, gameMap, gameScore, totalGameTime, scoreboard, teamNames)
-    print("GAMEMODE: ", gameMode)
-    print("MAP: ", gameMap)
-    print("TOTAL GAME TIME", totalGameTime)
-    print("SCORE: ", gameScore[0], gameScore[1])
+        exportExcel = excelUtils.exportToExcel(gameMode, gameMap, gameScore, totalGameTime, scoreboard, teamNames)
+        # print("GAMEMODE: ", gameMode)
+        # print("MAP: ", gameMap)
+        # print("TOTAL GAME TIME", totalGameTime)
+        # print("SCORE: ", gameScore[0], gameScore[1])
 
-    print("\n", teamNames[0])
-    pprint(scoreboard[:len(scoreboard)//2], compact=True)
-    print("\n", teamNames[1])
-    pprint(scoreboard[len(scoreboard)//2:], compact=True)
+        # print("\n", teamNames[0])
+        # pprint(scoreboard[:len(scoreboard)//2], compact=True)
+        # print("\n", teamNames[1])
+        # pprint(scoreboard[len(scoreboard)//2:], compact=True)
 
 

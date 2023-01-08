@@ -13,20 +13,20 @@ def removeBestOfFiveText(texts):
     idsToRemove.append(best.id)
 
     for text in texts:
-        if (text.bounds.topLeft['y'] in range(best.bounds.topLeft['y'] - 3, best.bounds.topLeft['y'] + 3)
+        if (text.bounds.topLeft.y in range(best.bounds.topLeft.y - 3, best.bounds.topLeft.y + 3)
             and best.id != text.id):
             idsToRemove.append(text.id)
     
     return list(filter(lambda x: x.id not in idsToRemove, texts))
 
 def hasOutliers(data, deviation):
-    sortedListIndexs = sorted(data, key=lambda x: data[x].bounds.topLeft['x'])
+    sortedListIndexs = sorted(data, key=lambda x: data[x].bounds.topLeft.x)
     sortedList = []
     for x in sortedListIndexs:
         sortedList.append(data[x])
-    median = (sortedList[3].bounds.topLeft['x'] + sortedList[4].bounds.topLeft['x'])/2
+    median = (sortedList[3].bounds.topLeft.x + sortedList[4].bounds.topLeft.x)/2
     for x in sortedList:
-        if x.bounds.topLeft['x'] > median + deviation or  x.bounds.topLeft['x'] < median - deviation:
+        if x.bounds.topLeft.x > median + deviation or  x.bounds.topLeft.x < median - deviation:
             return True
     return False
 
@@ -48,8 +48,8 @@ def getScoreBoard(texts):
             if idx2 == 0:
                 playerNumbers[idx1] = value
                 continue
-            # change this later to ['x'] when using real data
-            if playerNumbers[idx1].bounds.topLeft['x'] > value.bounds.topLeft['x']:
+            # change this later to .x when using real data
+            if playerNumbers[idx1].bounds.topLeft.x > value.bounds.topLeft.x:
                 playerNumbers[idx1] = value
 
     if hasOutliers(playerNumbers, 5):
@@ -62,10 +62,10 @@ def getScoreBoard(texts):
     for key in playerNumbers:
         unsortedScoreboard = []
         for test in texts:
-            if test.bounds.bottomLeft['y'] in range(playerNumbers[key].bounds.bottomLeft['y'] - 5, playerNumbers[key].bounds.bottomLeft['y'] + 5):
+            if test.bounds.bottomLeft.y in range(playerNumbers[key].bounds.bottomLeft.y - 5, playerNumbers[key].bounds.bottomLeft.y + 5):
                 unsortedScoreboard.append({
                     "description": test.description,
-                    "position": test.bounds.bottomLeft['x']
+                    "position": test.bounds.bottomLeft.x
                 })
         sortedRow = sorted(unsortedScoreboard, key=lambda x: x['position'])
         scoreboard.append(list(map(lambda x:x['description'], sortedRow)))
@@ -86,8 +86,8 @@ def getGameMode(texts):
     # game mode is always top left, so we grab the top left most word
     for text in texts:
         vertices = text.bounds.topLeft
-        x1 = vertices['x']
-        y1 = vertices['y']
+        x1 = vertices.x
+        y1 = vertices.y
         if y1 < top_left_y or (x1 <= top_left_x and y1 < top_left_y):
             top_left_x = x1
             top_left_y = y1
@@ -100,20 +100,20 @@ def getWordsBelow(texts, target):
     for text in texts:
         curBounds = text.bounds
         # under 
-        # if top left ['x'] in range 5
-        if (curBounds.topLeft['x'] in range(target.bounds.topLeft['x'] - 3, target.bounds.topLeft['x'] + 3) and
-            curBounds.topLeft['y'] < target.bounds.bottomLeft['y'] + 20 and
+        # if top left .x in range 5
+        if (curBounds.topLeft.x in range(target.bounds.topLeft.x - 3, target.bounds.topLeft.x + 3) and
+            curBounds.topLeft.y < target.bounds.bottomLeft.y + 20 and
             target.description is not text.description 
             ):
             belowText = text
     
     gameMapWords = []
     for text in texts:
-        if (text.bounds.topLeft['y'] in range(belowText.bounds.topLeft['y'] - 7, belowText.bounds.topLeft['y'] + 7) 
+        if (text.bounds.topLeft.y in range(belowText.bounds.topLeft.y - 7, belowText.bounds.topLeft.y + 7) 
             and not text.description.isdigit()):
             gameMapWords.append({
                 "description": text.description,
-                "position": text.bounds.topLeft['x']
+                "position": text.bounds.topLeft.x
             })
     
     sortedWords = sorted(gameMapWords, key=lambda x: x['position'])
@@ -123,24 +123,24 @@ def getWordsBelow(texts, target):
 
 def getTeamNames(texts): 
     # Get team names, they are the left furthest texts
-    teamNames = heapq.nsmallest(2, texts, key=lambda x: x.bounds.topLeft['x'])
+    teamNames = heapq.nsmallest(2, texts, key=lambda x: x.bounds.topLeft.x)
 
     # Make sure they are ordered from top to bottom
-    teamNames.sort(key=lambda y: y.bounds.topLeft['y'])
+    teamNames.sort(key=lambda y: y.bounds.topLeft.y)
 
     # Team Names consist of more than one word so fetch them
     def findWordsToRight(initial, texts):
         done = False
-        boundsX = initial.bounds.topRight['x']
-        boundsY = initial.bounds.topRight['y']
+        boundsX = initial.bounds.topRight.x
+        boundsY = initial.bounds.topRight.y
         teamName = initial.description
         while not done:
             done = True
             for text in texts:
-                if (text.bounds.topLeft['x'] in range(boundsX, boundsX + 15) and 
-                    text.bounds.topLeft['y'] in range(boundsY - 3, boundsY + 3) and
+                if (text.bounds.topLeft.x in range(boundsX, boundsX + 15) and 
+                    text.bounds.topLeft.y in range(boundsY - 3, boundsY + 3) and
                     text.description not in teamName):
-                    boundsX = text.bounds.topRight['x']
+                    boundsX = text.bounds.topRight.x
                     teamName = teamName + " " + text.description
                     done = False
         return teamName
@@ -159,8 +159,8 @@ def getGameScore(texts, gameMode, teamNames):
     # score is top right most exluding game mode
     for text in texts:
         vertices = text.bounds.topRight
-        x1 = vertices['x']
-        y1 = vertices['y']
+        x1 = vertices.x
+        y1 = vertices.y
         if ((y1 <= top_right_y or 
             (y1 <= top_right_y and x1 >= top_right_x) or
             x1 >= top_right_x and y1 in range(top_right_y - 5, top_right_y + 5)
@@ -173,14 +173,14 @@ def getGameScore(texts, gameMode, teamNames):
             rightScore = text
     # now get the other score which is left of the score we just found
     leftScore = None
-    boundsY = rightScore.bounds.topLeft['y']
+    boundsY = rightScore.bounds.topLeft.y
     for text in texts:
         if leftScore is None:
             leftScore = text
             continue
 
-        if (text.bounds.topLeft['y'] in range(boundsY - 3, boundsY + 3) and 
-            text.bounds.topRight['x'] > leftScore.bounds.topRight['x'] and
+        if (text.bounds.topLeft.y in range(boundsY - 3, boundsY + 3) and 
+            text.bounds.topRight.x > leftScore.bounds.topRight.x and
             text.description is not rightScore.description and
             text.description.isnumeric()):
             leftScore = text
