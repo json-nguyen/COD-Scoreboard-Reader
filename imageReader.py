@@ -54,7 +54,7 @@ if __name__ == "__main__":
     # debuggingUtils.dumpJson(texts)
 
     """ Read in existing json file so we dont need to call API while testing """
-    f = open('testData/testData2.json')
+    f = open('testData/testData.json')
     jsonData = json.load(f)
     initialTexts = debuggingUtils.convertJsonToImageTextList(jsonData) 
     texts = dataExtractorUtils.removeBestOfFiveText(initialTexts)

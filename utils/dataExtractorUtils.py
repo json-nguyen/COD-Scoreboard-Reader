@@ -2,7 +2,6 @@
 import heapq
 
 def removeBestOfFiveText(texts): 
-    print("initial length", len(texts))
     best = None
     idsToRemove = []
     for text in texts:
@@ -75,7 +74,6 @@ def getScoreBoard(texts):
 
 def getTopLeftCorner(texts): 
     gameMode = getGameMode(texts)
-    print("GAMEMODE: ", gameMode.description)
     gameMap, gameMapText = getWordsBelow(texts, gameMode)
 
     totalGameTime, _ = getWordsBelow(texts, gameMapText)
@@ -107,7 +105,6 @@ def getWordsBelow(texts, target):
             curBounds.topLeft['y'] < target.bounds.bottomLeft['y'] + 20 and
             target.description is not text.description 
             ):
-            print('here')
             belowText = text
     
     gameMapWords = []
@@ -152,23 +149,28 @@ def getTeamNames(texts):
     team2 = findWordsToRight(teamNames[1], texts)
 
     return [team1, team2]
-
+# 42 515 47
+# 70 645 49
 def getGameScore(texts, gameMode, teamNames): 
+    print('game', gameMode)
     rightScore = None
-    top_right_x = float('inf')
+    top_right_x = 0
     top_right_y = float('inf')
     # score is top right most exluding game mode
     for text in texts:
         vertices = text.bounds.topRight
         x1 = vertices['x']
         y1 = vertices['y']
-        if ((y1 < top_right_y or (x1 >= top_right_x and y1 < top_right_y)) and 
-            text.description is not gameMode and
-            text.description in teamNames != -1):
+        if ((y1 <= top_right_y or 
+            (y1 <= top_right_y and x1 >= top_right_x) or
+            x1 >= top_right_x and y1 in range(top_right_y - 5, top_right_y + 5)
+            ) and 
+            text.description != gameMode and
+            text.description not in teamNames and
+            text.description.isnumeric()):
             top_right_x = x1
             top_right_y = y1
             rightScore = text
-    
     # now get the other score which is left of the score we just found
     leftScore = None
     boundsY = rightScore.bounds.topLeft['y']
@@ -179,7 +181,8 @@ def getGameScore(texts, gameMode, teamNames):
 
         if (text.bounds.topLeft['y'] in range(boundsY - 3, boundsY + 3) and 
             text.bounds.topRight['x'] > leftScore.bounds.topRight['x'] and
-            text.description is not rightScore.description):
+            text.description is not rightScore.description and
+            text.description.isnumeric()):
             leftScore = text
 
     return [leftScore.description, rightScore.description]
