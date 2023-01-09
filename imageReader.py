@@ -60,14 +60,13 @@ if __name__ == "__main__":
     images = os.listdir('./images')
     for image in images:
         initialTexts = detectText("./images/" + image)
-        # print(images)
+
+        print("READING IMAGE", image)
         texts = dataExtractorUtils.removeBestOfFiveText(initialTexts)
         gameMode, gameMap, totalGameTime = dataExtractorUtils.getTopLeftCorner(texts)
         scoreboard = dataExtractorUtils.getScoreBoard(texts)
         teamNames = dataExtractorUtils.getTeamNames(texts)
         gameScore = dataExtractorUtils.getGameScore(texts, gameMode, teamNames)
-
-        exportExcel = excelUtils.exportToExcel(gameMode, gameMap, gameScore, totalGameTime, scoreboard, teamNames)
         # print("GAMEMODE: ", gameMode)
         # print("MAP: ", gameMap)
         # print("TOTAL GAME TIME", totalGameTime)
@@ -77,5 +76,7 @@ if __name__ == "__main__":
         # pprint(scoreboard[:len(scoreboard)//2], compact=True)
         # print("\n", teamNames[1])
         # pprint(scoreboard[len(scoreboard)//2:], compact=True)
+        exportExcel = excelUtils.exportToExcel(gameMode, gameMap, gameScore, totalGameTime, scoreboard, teamNames)
+      
 
 
