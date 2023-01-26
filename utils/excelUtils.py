@@ -26,10 +26,8 @@ def exportToExcel(gameMode, gameMap, gameScore, gameDuration, scoreboard, teamNa
   losingTeam = teamNames[1] if gameScore[0] > gameScore[1] else teamNames[0]
   winningScore = gameScore[0] if gameScore[0] > gameScore[1] else gameScore[1]
   losingScore = gameScore[1] if gameScore[0] > gameScore[1] else gameScore[0]
-  winningScoreboard = scoreboard[:len(scoreboard)//2] if gameScore[0] > gameScore[1] else scoreboard[len(scoreboard)//2:]
-  losingScoreboard = scoreboard[len(scoreboard)//2:] if gameScore[0] > gameScore[1] else scoreboard[:len(scoreboard)//2]
- 
-  for row in winningScoreboard:
+
+  for idx, row in enumerate(scoreboard):
     dataframe['map'].append(gameMap.lower())
     dataframe['gamemode'].append(gameMode.lower())
     dataframe['game_duration_minutes'].append(gameDuration.split(':')[0])
@@ -38,32 +36,14 @@ def exportToExcel(gameMode, gameMap, gameScore, gameDuration, scoreboard, teamNa
     dataframe['losing_team'].append(losingTeam)
     dataframe['winning_team_score'].append(winningScore)
     dataframe['losing_team_score'].append(losingScore)
-    dataframe['team'].append(winningTeam)
+    dataframe['team'].append(teamNames[0] if idx < 4 else teamNames[1])
     dataframe['player'].append(row[1].lower())
     dataframe['player_kills'].append(row[2].split('/')[0])
     dataframe['player_deaths'].append(row[2].split('/')[1])
     dataframe['player_assists'].append(row[3])
     dataframe['player_non_traded_kills'].append(row[4])
     dataframe['player_dmg'].append(row[6])
-    dataframe['player_hill_time'].append(row[7] if gameMode == 'HARDPOINT' else 'N/A')
-  
-  for row in losingScoreboard:
-    dataframe['map'].append(gameMap.lower())
-    dataframe['gamemode'].append(gameMode.lower())
-    dataframe['game_duration_minutes'].append(gameDuration.split(':')[0])
-    dataframe['game_duration_seconds'].append(gameDuration.split(':')[1])
-    dataframe['winning_team'].append(winningTeam)
-    dataframe['losing_team'].append(losingTeam)
-    dataframe['winning_team_score'].append(winningScore)
-    dataframe['losing_team_score'].append(losingScore)
-    dataframe['team'].append(losingTeam)
-    dataframe['player'].append(row[1].lower())
-    dataframe['player_kills'].append(row[2].split('/')[0])
-    dataframe['player_deaths'].append(row[2].split('/')[1])
-    dataframe['player_assists'].append(row[3])
-    dataframe['player_non_traded_kills'].append(row[4])
-    dataframe['player_dmg'].append(row[6])
-    dataframe['player_hill_time'].append(row[7] if gameMode == 'HARDPOINT' else 'N/A')
+    dataframe['player_hill_time'].append(toSeconds(row[7]) if gameMode == 'HARDPOINT' else 'N/A')
 
   df = None
   if(os.path.exists('data.xlsx')):
@@ -73,3 +53,8 @@ def exportToExcel(gameMode, gameMap, gameScore, gameDuration, scoreboard, teamNa
     df = pd.DataFrame(dataframe)
   df.to_excel('data.xlsx', index=False)
 
+def toSeconds(time):
+  if ":" not in time:
+    return
+  minutes, seconds = time.split(":")
+  return int(minutes) * 60 + int(seconds)
